@@ -1,0 +1,43 @@
+{
+  "name": "kotodama-uzfk8ut0",
+  "main": "svelte/.svelte-kit/cloudflare/_worker.js",
+  "compatibility_date": "2025-03-17",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "nodejs_als"
+  ],
+  "vars": {
+    "APP_CAPABILITIES": "[\"createTransfer\",\"listTransfers\",\"getTransfer\",\"confirmTransfer\",\"createMessage\",\"listMessages\",\"getBalance\",\"getTransferHistory\"]",
+    "APP_DESCRIPTION": "wire — Wire Transfer & Messaging Platform. International fund transfers, transfer confirmation workflows, secure messaging, and account balance management.",
+    "APP_DISPLAY_NAME": "Wire",
+    "APP_FRAMEWORK": "sveltekit-edge-bff",
+    "APP_NANOID": "uzfk8ut0",
+    "APP_PERFORMER_TYPE": "service",
+    "APP_UI_TYPE": "yoro",
+    "AGENTGATEWAY_MCP_ROUTER_URL": "https://mcp.etzhayyim.com/xrpc/com.etzhayyim.mcp.message"
+  },
+  "rules": [
+    {
+      "type": "CompiledWasm",
+      "globs": [
+        "**/*.wasm"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "uzfk8ut0.etzhayyim.com/*",
+      "zone_name": "etzhayyim.com"
+    },
+    {
+      "pattern": "wire.etzhayyim.com/*",
+      "zone_name": "etzhayyim.com"
+    }
+  ],
+  "assets": {
+    "directory": "./svelte/.svelte-kit/cloudflare/client",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  }
+}

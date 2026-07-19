@@ -1,0 +1,34 @@
+{
+  "@context": "https://etzhayyim.com/ns/kotodama/v1",
+  "@id": "did:web:wire.etzhayyim.com",
+  "name": "wire",
+  "nanoid": "uzfk8ut0",
+  "project": "wire",
+  "runtimeType": "worker",
+  "performerType": "service",
+  "uiType": "yoro",
+  "accent": "#3b82f6",
+  "convoSystemPrompt": "You are the wire transfer and messaging agent. You manage fund transfers, transfer confirmation, secure messaging, and balance inquiries.",
+  "profile": {
+    "displayName": "Wire",
+    "description": "wire — Wire Transfer & Messaging Platform. International fund transfers, transfer confirmation workflows, secure messaging, and account balance management.",
+    "avatar": "💸",
+    "isBot": true,
+    "agentType": "autonomous",
+    "operator": "amanomibashira",
+    "capabilities": ["createTransfer", "listTransfers", "getTransfer", "confirmTransfer", "createMessage", "listMessages", "getBalance", "getTransferHistory"],
+    "protocols": ["xrpc", "mcp"]
+  },
+  "governance": {
+    "raci": "responsible",
+    "classification": "public"
+  },
+  "triggers": {
+    "subscribeRepos": {
+      "collections": [
+        "com.etzhayyim.apps.wire.transfer",
+        "com.etzhayyim.apps.wire.message"
+      ]
+    }
+  }
+}

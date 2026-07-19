@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <!-- createTransfer -->
+  <bpmn:process id="wire-create-transfer" name="Wire Create Transfer" isExecutable="true">
+    <bpmn:startEvent id="start-create-transfer"/>
+    <bpmn:sequenceFlow id="sf-ct-1" sourceRef="start-create-transfer" targetRef="task-create-transfer"/>
+    <bpmn:serviceTask id="task-create-transfer" name="Create Transfer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="com.etzhayyim.apps.wire.create.transfer"/>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="sf-ct-2" sourceRef="task-create-transfer" targetRef="end-create-transfer"/>
+    <bpmn:endEvent id="end-create-transfer"/>
+  </bpmn:process>
+
+  <!-- listTransfers -->
+  <bpmn:process id="wire-list-transfers" name="Wire List Transfers" isExecutable="true">
+    <bpmn:startEvent id="start-list-transfers"/>
+    <bpmn:sequenceFlow id="sf-lt-1" sourceRef="start-list-transfers" targetRef="task-list-transfers"/>
+    <bpmn:serviceTask id="task-list-transfers" name="List Transfers">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="com.etzhayyim.apps.wire.list.transfers"/>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="sf-lt-2" sourceRef="task-list-transfers" targetRef="end-list-transfers"/>
+    <bpmn:endEvent id="end-list-transfers"/>
+  </bpmn:process>
+
+  <!-- getTransfer -->
+  <bpmn:process id="wire-get-transfer" name="Wire Get Transfer" isExecutable="true">
+    <bpmn:startEvent id="start-get-transfer"/>
+    <bpmn:sequenceFlow id="sf-gt-1" sourceRef="start-get-transfer" targetRef="task-get-transfer"/>
+    <bpmn:serviceTask id="task-get-transfer" name="Get Transfer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="com.etzhayyim.apps.wire.get.transfer"/>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="sf-gt-2" sourceRef="task-get-transfer" targetRef="end-get-transfer"/>
+    <bpmn:endEvent id="end-get-transfer"/>
+  </bpmn:process>
+
+  <!-- confirmTransfer -->
+  <bpmn:process id="wire-confirm-transfer" name="Wire Confirm Transfer" isExecutable="true">
+    <bpmn:startEvent id="start-confirm-transfer"/>
+    <bpmn:sequenceFlow id="sf-cft-1" sourceRef="start-confirm-transfer" targetRef="task-confirm-transfer"/>
+    <bpmn:serviceTask id="task-confirm-transfer" name="Confirm Transfer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="com.etzhayyim.apps.wire.confirm.transfer"/>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="sf-cft-2" sourceRef="task-confirm-transfer" targetRef="end-confirm-transfer"/>
+    <bpmn:endEvent id="end-confirm-transfer"/>
+  </bpmn:process>
+
+  <!-- createMessage -->
+  <bpmn:process id="wire-create-message" name="Wire Create Message" isExecutable="true">
+    <bpmn:startEvent id="start-create-message"/>
+    <bpmn:sequenceFlow id="sf-cm-1" sourceRef="start-create-message" targetRef="task-create-message"/>
+    <bpmn:serviceTask id="task-create-message" name="Create Message">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="com.etzhayyim.apps.wire.create.message"/>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="sf-cm-2" sourceRef="task-create-message" targetRef="end-create-message"/>
+    <bpmn:endEvent id="end-create-message"/>
+  </bpmn:process>
+
+  <!-- listMessages -->
+  <bpmn:process id="wire-list-messages" name="Wire List Messages" isExecutable="true">
+    <bpmn:startEvent id="start-list-messages"/>
+    <bpmn:sequenceFlow id="sf-lm-1" sourceRef="start-list-messages" targetRef="task-list-messages"/>
+    <bpmn:serviceTask id="task-list-messages" name="List Messages">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="com.etzhayyim.apps.wire.list.messages"/>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="sf-lm-2" sourceRef="task-list-messages" targetRef="end-list-messages"/>
+    <bpmn:endEvent id="end-list-messages"/>
+  </bpmn:process>
+
+  <!-- getBalance -->
+  <bpmn:process id="wire-get-balance" name="Wire Get Balance" isExecutable="true">
+    <bpmn:startEvent id="start-get-balance"/>
+    <bpmn:sequenceFlow id="sf-gb-1" sourceRef="start-get-balance" targetRef="task-get-balance"/>
+    <bpmn:serviceTask id="task-get-balance" name="Get Balance">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="com.etzhayyim.apps.wire.get.balance"/>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="sf-gb-2" sourceRef="task-get-balance" targetRef="end-get-balance"/>
+    <bpmn:endEvent id="end-get-balance"/>
+  </bpmn:process>
+
+  <!-- getTransferHistory -->
+  <bpmn:process id="wire-get-transfer-history" name="Wire Get Transfer History" isExecutable="true">
+    <bpmn:startEvent id="start-get-transfer-history"/>
+    <bpmn:sequenceFlow id="sf-gth-1" sourceRef="start-get-transfer-history" targetRef="task-get-transfer-history"/>
+    <bpmn:serviceTask id="task-get-transfer-history" name="Get Transfer History">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="com.etzhayyim.apps.wire.get.transferHistory"/>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="sf-gth-2" sourceRef="task-get-transfer-history" targetRef="end-get-transfer-history"/>
+    <bpmn:endEvent id="end-get-transfer-history"/>
+  </bpmn:process>
+
+</bpmn:definitions>
