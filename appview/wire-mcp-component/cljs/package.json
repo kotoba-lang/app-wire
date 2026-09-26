@@ -1,0 +1,17 @@
+{
+  "name": "wire-mcp-component-cljs",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "amu compile --target wasm32-browser app",
+    "build": "amu compile --target wasm32-browser app",
+    "test": "amu compile --target wasm32-browser test && node out/tests.js",
+    "page": "kbb --backend sci --classpath \"$(kbb -Spath)\" scripts/gen-page.cljs",
+    "page:check": "kbb --backend sci --classpath \"$(kbb -Spath)\" scripts/gen-page.cljs --check"
+  },
+  "devDependencies": {
+    "shadow-cljs": "2.28.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

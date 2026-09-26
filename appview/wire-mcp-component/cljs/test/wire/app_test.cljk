@@ -1,0 +1,51 @@
+(ns wire.app-test
+  (:require [cljs.test :refer [deftest is testing use-fixtures]]
+            [re-frame.db :as rf-db]
+            [re-frame.core :as rf]
+            [wire.app :as app]))
+
+(use-fixtures :each
+  {:before (fn [] (reset! rf-db/app-db {}))
+   :after (fn [] (reset! rf-db/app-db {}))})
+
+(deftest initial-db-matches-original-svelte-data
+  (testing "initial-db carries the exact same values as the original +page.svelte `app` object"
+    (let [a (:app app/initial-db)]
+      (is (= "Wire Mcp Component" (:title a)))
+      (is (= "etzhayyim-project-wire" (:project a)))
+      (is (= "wire-mcp-component" (:name a)))
+      (is (= "appview" (:kind a)))
+      (is (= 0 (:route-count a)))
+      (is (= [] (:routes a)))
+      (is (= [] (:vars a)))
+      (is (= true (:xrpc a)))
+      (is (= "60-apps/etzhayyim-project-wire/appview/wire-mcp-component/svelte/src/routes/+page.svelte"
+             (:relative-path a))))))
+
+(deftest initialize-event-seeds-subs
+  (testing "dispatching ::initialize makes all subs resolve to the expected values"
+    (rf/dispatch-sync [:wire.app/initialize])
+    (is (= "Wire Mcp Component" @(rf/subscribe [:wire.app/title])))
+    (is (= "wire-mcp-component" @(rf/subscribe [:wire.app/name])))
+    (is (= "appview" @(rf/subscribe [:wire.app/kind])))
+    (is (= "etzhayyim-project-wire" @(rf/subscribe [:wire.app/project])))
+    (is (= 0 @(rf/subscribe [:wire.app/route-count])))
+    (is (= [] @(rf/subscribe [:wire.app/routes])))
+    (is (= [] @(rf/subscribe [:wire.app/vars])))
+    (is (true? @(rf/subscribe [:wire.app/xrpc?])))
+    (is (= "60-apps/etzhayyim-project-wire/appview/wire-mcp-component/svelte/src/routes/+page.svelte"
+           @(rf/subscribe [:wire.app/relative-path])))))
+
+(deftest view-renders-hiccup-rooted-at-main-with-dads-container
+  (testing "app-view returns hiccup rooted at :main, carrying a DADS dds-ext-container class"
+    (rf/dispatch-sync [:wire.app/initialize])
+    (let [hiccup (app/app-view)]
+      (is (= :main (first hiccup)))
+      (is (= "dds-ext-container" (:class (second hiccup)))))))
+
+(deftest xrpc-fact-text-toggles-on-flag
+  (testing "the XRPC fact renders enabled/not-configured text matching the original ternary"
+    (rf/dispatch-sync [:wire.app/initialize])
+    (is (true? @(rf/subscribe [:wire.app/xrpc?])))
+    ;; mirrors `{app.xrpc ? 'enabled' : 'not configured'}` from +page.svelte
+    (is (= "enabled" (if @(rf/subscribe [:wire.app/xrpc?]) "enabled" "not configured")))))

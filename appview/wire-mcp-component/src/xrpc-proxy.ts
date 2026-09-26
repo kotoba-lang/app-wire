@@ -1,3 +1,7 @@
+// SVELTEKIT-BACKEND-PRESERVED: moved out of svelte/ during the cljs migration; not wired.
+// Source: appview/wire-mcp-component/svelte/src/routes/xrpc/[...path]/+server.ts (byte-identical below this header)
+// It imports @sveltejs/kit and will not run outside a SvelteKit build. Whether to
+// re-wire it into src/app.ts is a product decision, not part of this migration.
 import { json, type RequestEvent } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
