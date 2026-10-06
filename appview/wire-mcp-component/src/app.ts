@@ -4,7 +4,9 @@
 //            createMessage / listMessages / getBalance / getTransferHistory
 
 interface SecretBinding { get(): Promise<string>; }
+interface Fetcher { fetch(req: Request): Promise<Response>; }
 interface Env {
+  ASSETS?: Fetcher;
   DISPATCHER_URL?: string;
   DISPATCHER_INTERNAL_SECRET?: string | SecretBinding;
   APP_NANOID?: string;
@@ -38,6 +40,7 @@ export default {
       return proxyToDispatcher(env, nsid, body);
     }
 
+    if (env.ASSETS) return env.ASSETS.fetch(req);
     return json({ error: "NotFound" }, 404);
   },
 } satisfies ExportedHandler<Env>;
