@@ -1,0 +1,7 @@
+;; wire-mcp appview — single-page app, single build/module.
+;; Mirrors the slides / yotei / app-saiban cljs layout (appview + CF Worker static assets).
+{:deps {:aliases [:cljs]}
+ :builds {:app {:target :browser
+                :output-dir "public/js"
+                :asset-path "js"
+                :modules {:app {:init-fn wire.desktop/init!}}}}}
