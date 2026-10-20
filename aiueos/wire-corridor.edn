@@ -1,0 +1,19 @@
+;; app-wire — itonami（dapp）の aiueos アプリ記述子（notes.edn 形）。
+;; 判定コアは aiueos/wire_corridor.cljk（送金コリドーの判定）。
+;; 正本は kotoba/src/registry.ts + types.ts。pure（:effects #{}）。
+;; 転送台帳とセキュアメッセージは E2E 暗号封筒の inner-type。
+{:aiueos/component :app/wire-corridor
+ :aiueos/kind :app
+ :aiueos/trust :untrusted
+ :aiueos/source "wire_corridor.cljk"
+ :aiueos/wasm "wire_corridor.wasm"
+ :aiueos/entry "main"
+ :aiueos/args []
+ :aiueos/imports #{}
+ :aiueos/exports #{:app/main
+                   :app/transfer-status-ok
+                   :app/rate-admission
+                   :app/stat-admission
+                   :app/upsert-take}
+ :aiueos/effects #{}
+ :aiueos/limits {:memory-pages 16 :fuel 5000000}}

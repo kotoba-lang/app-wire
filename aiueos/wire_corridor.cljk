@@ -1,0 +1,68 @@
+(ns wire.corridor
+  "wire（送金）判定コア — itonami dapp bundle（pure, :effects #{}）。
+
+  国際送金コリドーのレート・統計・転送状態の判定（正本:
+  kotoba/src/registry.ts + types.ts）:
+
+  - **TransferStatus は 4 つの閉じた集合**: pending / confirmed / settled /
+    failed。
+  - コリドーレートは corridor と currencyPair が必須、**ratePermille は
+    非負整数**（invalidRatePermille）。upsert（既存なら updated、無ければ
+    recorded）。
+  - コリドー統計は corridor / period / currency が必須、**transferCount と
+    totalMinorUnits は非負整数**（invalidAggregate）。
+  - 転送台帳とセキュアメッセージは **E2E 暗号封筒の inner-type**（送金先・
+    金額・文面はトランスポートで平文にしない）。
+
+  transfer-status-ok: 1 = 0..3（pending/confirmed/settled/failed）の内
+  rate-admission の戻り: 0 = 記録可 / 1 = missingRequiredFields
+    / 2 = invalidRatePermille
+  stat-admission の戻り: 0 = 記録可 / 1 = missingRequiredFields
+    / 2 = invalidAggregate
+  upsert-take: 1 = updated（既存）/ 0 = recorded（新規）
+
+  実行 host はスカラーのみ = KIR v3 / i64/direct ABI（kernel/selfhost 両対応）。
+
+  テストはゼロ引数 test-*、戻り 1/0:
+  <amu> test aiueos/wire_corridor.cljk"
+  (:export [main transfer-status-ok rate-admission stat-admission upsert-take
+            test-status test-rate test-stat test-upsert test-fail-closed]))
+
+(defn main [] :i64
+  0)
+
+(defn transfer-status-ok [code :i64] :i64
+  (if (and (>= code 0) (<= code 3)) 1 0))
+
+(defn rate-admission [has-required :i64 rate-uint :i64] :i64
+  (if (= has-required 0)
+    1
+    (if (= rate-uint 1) 0 2)))
+
+(defn stat-admission [has-required :i64 counts-uint :i64] :i64
+  (if (= has-required 0)
+    1
+    (if (= counts-uint 1) 0 2)))
+
+(defn upsert-take [was-present :i64] :i64
+  (if (= was-present 1) 1 0))
+
+;; --- tests（戻り 1 = pass） ------------------------------------------------
+
+(defn test-status [] :i64
+  ;; pending / confirmed / settled / failed の 4 つ
+  (if (= (+ (transfer-status-ok 0) (transfer-status-ok 3) (transfer-status-ok 4) (transfer-status-ok -1)) 2) 1 0))
+
+(defn test-rate [] :i64
+  (if (= (+ (rate-admission 1 1) (rate-admission 0 1) (rate-admission 1 0)) 3) 1 0))
+
+(defn test-stat [] :i64
+  (if (= (+ (stat-admission 1 1) (stat-admission 0 1) (stat-admission 1 0)) 3) 1 0))
+
+(defn test-upsert [] :i64
+  ;; 既存は updated、新規は recorded
+  (if (= (+ (upsert-take 1) (upsert-take 0)) 1) 1 0))
+
+(defn test-fail-closed [] :i64
+  ;; 範囲外の status は拒否
+  (if (= (+ (transfer-status-ok 9) (rate-admission 0 0)) 1) 1 0))
