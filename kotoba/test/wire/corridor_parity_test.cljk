@@ -1,0 +1,28 @@
+(ns wire.corridor-parity-test
+  "aiueos/wire_corridor.cljk（判定コア）と正本（registry.ts / types.ts）の
+  parity。閉じた集合・拒否名・E2E inner-type が変われば落ちる drift 検査。"
+  (:require [clojure.test :refer [deftest is testing]]
+            [clojure.string :as str]
+            ["fs" :as fs]))
+
+(def types-src
+  (fs/readFileSync (str/join "/" ["kotoba" "src" "types.ts"]) "utf8"))
+(def registry
+  (fs/readFileSync (str/join "/" ["kotoba" "src" "registry.ts"]) "utf8"))
+
+(deftest corridor-rules-match-guest
+  (testing "guest test-status: TransferStatus の 4 つ"
+    (doseq [s ["pending" "confirmed" "settled" "failed"]]
+      (is (str/includes? types-src s))))
+  (testing "guest test-rate / test-stat: 拒否名と permille"
+    (is (str/includes? registry "invalidRatePermille"))
+    (is (str/includes? registry "invalidAggregate"))
+    (is (str/includes? registry "missingRequiredFields"))
+    (is (str/includes? registry "ratePermille")))
+  (testing "guest test-upsert: 既存は updated、新規は recorded"
+    (is (str/includes? registry "wasPresent"))
+    (is (str/includes? registry "updated"))
+    (is (str/includes? registry "recorded")))
+  (testing "guest の境界: 転送台帳とメッセージは E2E inner-type"
+    (is (str/includes? types-src "transferLedger"))
+    (is (str/includes? types-src "secureMessage"))))
